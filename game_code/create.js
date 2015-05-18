@@ -28,28 +28,28 @@ function sound_init(){
   fx.allowMultiple = true
   fx.addMarker('wall', 1, .05, .3)
   fx.addMarker('failed', 3, .5)
-  fx.addMarker('materialize', 4, 3.2)
+  fx.addMarker('materialize', 4, 3, .1)
   fx.addMarker('meow', 8, .5)
   fx.addMarker('ping', 9, .1)
   fx.addMarker('pickup', 10, 1)
-  fx.addMarker('dematerialize', 12, 4.2)
+  fx.addMarker('dematerialize', 12, 3)
   fx.addMarker('shot', 17, 1)
-  fx.addMarker('switch', 19, .3)
+  fx.addMarker('out', 19, .3, .3)
 
   explosion = game.add.audio('explosion');
   blaster = game.add.audio('blaster')
   shotgun = game.add.audio('shotgun')
   footstep = game.add.audio('step')
-  load = game.add.audio('load')
+  // load = game.add.audio('load')
 
   music = game.add.audio('music')
   music.loop = true
 
   music.volume = 1
-  shotgun.volume = .2
-  blaster.volume = .1
-  explosion.volume = .3
-  footstep.volume = .2
+  shotgun.volume = .4
+  blaster.volume = .3
+  explosion.volume = .5
+  footstep.volume = .4
   
   music.play()
 }

@@ -70,13 +70,19 @@ function gun_fire () {
   }
 }
 function hamikaze () {
-  load.play()
   var humstar = humstars.getFirstExists(false)
   if(humstar){
+    fx.play('dematerialize')
     humstar.reset(human.x, human.y)
     humstar.play('bounce',10,true)
     humstar.lifespan = 5000
     game.physics.arcade.velocityFromRotation(human.rotation, 100, humstar.body.velocity)
+    next_hamikaze = game.time.now + 2000;
+  }else{
+    if (game.time.now > next_hamikaze){
+        fx.play('out')
+        next_hamikaze = game.time.now + hamikaze_rate;
+      }
   }
 }
 function explode (a, b) {
@@ -94,9 +100,9 @@ function explode (a, b) {
 function walk(step_rate, stepping_mult, moving_mult){
   human.animations.play('run', step_rate, true)
   human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, moving_mult))
-  if (game.time.now > stepping){
+  if (game.time.now > next_step){
     footstep.play()
-    stepping = game.time.now + step_rate*stepping_mult
+    next_step = game.time.now + step_rate*stepping_mult
   }
 }
 

@@ -17,5 +17,4 @@ function preload() {
     game.load.spritesheet('humstar', 'assets/sprites/humstar.png', 32,32, 6);
 
     game.load.image('bullet', 'assets/sprites/bullet.png');
-    // game.load.image('bullet', 'assets/sprites/bullet-blue.png');
 }

@@ -19,4 +19,7 @@ var wall_hitting_interval = 1000
 
 var explosions
 
-var stepping = 0
+var next_step = 0
+
+var next_hamikaze = 0
+var hamikaze_rate = fire_rate
