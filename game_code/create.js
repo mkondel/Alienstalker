@@ -26,21 +26,24 @@ function start_engine(){
 function sound_init(){
   fx = game.add.audio('sfx')
   fx.allowMultiple = true
-  fx.addMarker('wall', 1, .05, .3)
+  fx.addMarker('wall', 1, .05)
   fx.addMarker('failed', 3, .5)
-  fx.addMarker('materialize', 4, 3, .1)
+  fx.addMarker('materialize', 4, 3)
   fx.addMarker('meow', 8, .5)
   fx.addMarker('ping', 9, .1)
   fx.addMarker('pickup', 10, 1)
   fx.addMarker('dematerialize', 12, 3)
-  fx.addMarker('shot', 17, 1)
-  fx.addMarker('out', 19, .3, .3)
+  fx.addMarker('out', 17, 1)
+  fx.addMarker('plup', 19, .3, .3)
 
   explosion = game.add.audio('explosion');
+  explosion.allowMultiple = true
   blaster = game.add.audio('blaster')
+  blaster.allowMultiple = true
   shotgun = game.add.audio('shotgun')
+  shotgun.allowMultiple = true
   footstep = game.add.audio('step')
-  // load = game.add.audio('load')
+  footstep.allowMultiple = true
 
   music = game.add.audio('music')
   music.loop = true
@@ -48,7 +51,6 @@ function sound_init(){
   music.volume = 1
   shotgun.volume = .4
   blaster.volume = .3
-  explosion.volume = .5
   footstep.volume = .4
   
   music.play()
@@ -76,6 +78,7 @@ function generate_human(){
   set_player_collisions(walls, [121, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 234])
   set_player_collisions(floor, [90] )
   human.rotation_speed = .1
+  human.hit_volume = .5
 }
 
 
@@ -89,6 +92,7 @@ function load_weapons(){
     bullet.body.setSize(8,8,0,0)
     bullet.scale.set(.5)
     bullet.fireball_scale = .5
+    bullet.explosion_volume = .3
   }
 
   //  explosion pool
@@ -100,16 +104,19 @@ function load_weapons(){
     fireball.animations.add('kaboom')
   }
 
-  //  humstar one and only
-  humstars = game.add.group()
-  humstars.enableBody = true
+  //  hamikazi one and only
+  hamikazis = game.add.group()
+  hamikazis.enableBody = true
+  hamikazis.outOfBoundsKill = true
   for (var i = 0; i < 1; i++){
-    var humstar = humstars.create(0, 0, 'humstar', [0], false)
-    humstar.anchor.setTo(.5)
-    humstar.body.setSize(64,64,0,0)
-    humstar.scale.set(2.5)
-    humstar.animations.add('bounce')
-    humstar.fireball_scale = 2
+    var hamikazi = hamikazis.create(0, 0, 'hamikazi', [0], false)
+    hamikazi.anchor.setTo(.5)
+    hamikazi.body.setSize(64,64,0,0)
+    hamikazi.scale.set(2.5)
+    hamikazi.animations.add('bounce')
+    hamikazi.fireball_scale = 2
+    hamikazi.sound_effect = blaster
+    hamikazi.explosion_volume = 1
   }
 }
 
@@ -125,7 +132,7 @@ function roll_camera(){
 function implement_controls(){
   cursors = game.input.keyboard.createCursorKeys()
   fire_button = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-  humstar_button = game.input.keyboard.addKey(Phaser.Keyboard.X)
+  hamikazi_button = game.input.keyboard.addKey(Phaser.Keyboard.X)
 }
 
 

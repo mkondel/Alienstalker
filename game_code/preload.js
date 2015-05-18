@@ -14,7 +14,7 @@ function preload() {
 
     game.load.spritesheet('human', 'assets/sprites/walking_man.png', 80,80, 6);
     game.load.spritesheet('kaboom', 'assets/sprites/explode.png', 128,128, 16);
-    game.load.spritesheet('humstar', 'assets/sprites/humstar.png', 32,32, 6);
+    game.load.spritesheet('hamikazi', 'assets/sprites/humstar.png', 32,32, 6);
 
     game.load.image('bullet', 'assets/sprites/bullet.png');
 }

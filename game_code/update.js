@@ -15,13 +15,13 @@ function update(){
   game.physics.arcade.collide(human, floor, hit_the_wall, null, this)
   game.physics.arcade.collide(bullets, walls, explode, null, this)
   game.physics.arcade.collide(bullets, floor, explode, null, this)
-  game.physics.arcade.collide(humstars, walls, explode, null, this)
-  game.physics.arcade.collide(humstars, floor, explode, null, this)
+  game.physics.arcade.collide(hamikazis, walls, explode, null, this)
+  game.physics.arcade.collide(hamikazis, floor, explode, null, this)
 
 // actions
   if (fire_button.isDown)
     gun_fire()
-  if (humstar_button.isDown)
+  if (hamikazi_button.isDown)
     hamikaze()
 
 // TANK controls
@@ -64,23 +64,23 @@ function gun_fire () {
       bullet.rotation = human.rotation
       bullet.reset(human.x, human.y)
       game.physics.arcade.velocityFromRotation(human.rotation, 500, bullet.body.velocity)
-      blaster.play()
+      blaster.play('', 0, .25, false)
       next_fire = game.time.now + fire_rate;
     }
   }
 }
 function hamikaze () {
-  var humstar = humstars.getFirstExists(false)
-  if(humstar){
-    fx.play('dematerialize')
-    humstar.reset(human.x, human.y)
-    humstar.play('bounce',10,true)
-    humstar.lifespan = 5000
-    game.physics.arcade.velocityFromRotation(human.rotation, 100, humstar.body.velocity)
-    next_hamikaze = game.time.now + 2000;
+  var hamikazi = hamikazis.getFirstExists(false)
+  if(hamikazi){
+    fx.play('dematerialize', 0, .3, false, false)
+    hamikazi.reset(human.x, human.y)
+    hamikazi.play('bounce',10,true)
+    hamikazi.lifespan = 5000
+    game.physics.arcade.velocityFromRotation(human.rotation, 50, hamikazi.body.velocity)
+    next_hamikaze = game.time.now + 1500;
   }else{
     if (game.time.now > next_hamikaze){
-        fx.play('out')
+        fx.play('out', 0, .2, false, false)
         next_hamikaze = game.time.now + hamikaze_rate;
       }
   }
@@ -93,7 +93,7 @@ function explode (a, b) {
     fireball.scale.set(a.fireball_scale)
   }
   a.kill()
-  explosion.play()
+  explosion.play('', 0, a.explosion_volume, false, true)
 }
 
 
@@ -111,7 +111,7 @@ function hit_the_wall (a, b) {
   if (game.time.now > next_wall_hitting){
     a.hit_rotation = a.rotation
     a.is_stuck = true
-    fx.play('wall')
+    fx.play('wall', 0, a.hit_volume, false, false)
     next_wall_hitting = game.time.now + wall_hitting_interval;
   }
 }
