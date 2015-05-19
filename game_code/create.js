@@ -33,27 +33,23 @@ function sound_init(){
   pickup = game.add.audio('pickup')
   out = game.add.audio('out')
   plup = game.add.audio('plup')
+  eek = game.add.audio('eek')
+  hamikazi1 = game.add.audio('hamikazi1')
 
   explosion = game.add.audio('explosion');
   blaster = game.add.audio('blaster')
   shotgun = game.add.audio('shotgun')
   footstep = game.add.audio('step')
-  mumbling = game.add.audio('mumbling')
 
   explosion.allowMultiple = true
   blaster.allowMultiple = true
   shotgun.allowMultiple = true
-  footstep.allowMultiple = true
-  mumbling.allowMultiple = true
+  // mumbling.allowMultiple = true
 
-  shotgun.volume = .4
-  blaster.volume = .3
-  footstep.volume = .4
-
-  // music = game.add.audio('music')
-  // music.loop = true
-  // music.volume = 1
-  // music.play()
+  music = game.add.audio('music')
+  music.loop = true
+  music.volume = .5
+  music.play()
 }
 
 
@@ -89,8 +85,8 @@ function load_weapons(){
     bullet.anchor.set(.5)
     bullet.body.setSize(8,8,0,0)
     bullet.scale.set(.5)
-    bullet.explosion_scale = .5
-    bullet.explosion_volume = .3
+    bullet.explosion_scale = .3
+    bullet.explosion_volume = .2
     bullet.events.onKilled.add(blow_up, bullet)
   }
 
@@ -113,25 +109,21 @@ function load_weapons(){
     hamikazi.animations.add('bounce')
     hamikazi.sound_effect = blaster
     
-    hamikazi.explosion_scale = 2
+    hamikazi.explosion_scale = 1
     hamikazi.explosion_volume = 1
 
     reset_hamikazi(hamikazi)
     hamikazi.events.onKilled.add(reset_hamikazi, hamikazi)
     hamikazi.events.onKilled.add(blow_up, hamikazi)
-    hamikazi.events.onKilled.add(shutup)
 
-    hamikazi.mumble = function(){ 
-      disintegrate.play('', 0, .5)
-      disintegrate.onStop.add(function(){ 
-        mumbling.play('', 0, .15, true)
+    hamikazi.eek = function(){ 
+      hamikazi1.play('', 0, 1, false).onStop.add(function(){ 
+        eek.play('', 0, 1, true)
       })
     }
-    function shutup(){ mumbling.stop() }
-
 
     function reset_hamikazi(self){
-      shutup()
+      eek.stop()
       self.alpha = 0
       self.scale = {x:.1, y:.1}
       self.body.setSize(16,16,0,0)
@@ -139,7 +131,7 @@ function load_weapons(){
       self.fade_in = game.add.tween(self)
       self.scale_in = game.add.tween(self.scale)
       self.fade_in.to( { alpha: 1 }, 1000)
-      self.scale_in.to({x:3, y:3}, 2000)
+      self.scale_in.to({x:3, y:3}, 3000)
     }
   }
 }

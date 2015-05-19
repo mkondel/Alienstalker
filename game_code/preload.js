@@ -9,8 +9,9 @@ function preload() {
     game.load.audio('shotgun', 'assets/audio/shotgun.wav')
     game.load.audio('step', 'assets/audio/steps2.mp3')
     game.load.audio('load', 'assets/audio/load_up.wav')
-    // game.load.audio('music', 'assets/audio/dark_horror_cave.mp3')
-    game.load.audio('mumbling', 'assets/audio/power_down.wav')
+    game.load.audio('music', 'assets/audio/dark_horror_cave.mp3')
+    game.load.audio('eek', 'assets/audio/eek.wav')
+    game.load.audio('hamikazi1', 'assets/audio/hamikazi1.wav')
 
     game.load.audio('disintegrate', 'assets/audio/disintegrate.mp3')
     game.load.audio('materialize', 'assets/audio/SoundEffects/door_open.wav')

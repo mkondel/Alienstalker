@@ -56,7 +56,7 @@ function gun_fire () {
       bullet.rotation = human.rotation
       bullet.reset(human.x, human.y)
       game.physics.arcade.velocityFromRotation(human.rotation, 500, bullet.body.velocity)
-      blaster.play('', 0, .25, false)
+      blaster.play('', 0, .1, false)
       next_fire = game.time.now + fire_rate;
     }
   }
@@ -65,7 +65,7 @@ function hamikazi_fire() {
   var hamikazi = hamikazis.getFirstExists(false)
   if(hamikazi){
     hamikazi.reset(human.x, human.y)
-    hamikazi.mumble()
+    hamikazi.eek()
     hamikazi.play('bounce',30,true)
     hamikazi.lifespan = 5000
     game.physics.arcade.velocityFromRotation(human.rotation, 50, hamikazi.body.velocity)
@@ -74,8 +74,7 @@ function hamikazi_fire() {
     next_hamikazi = game.time.now + 1500;
   }else{
     if (game.time.now > next_hamikazi){
-        // fx.play('out', 0, .2, false, false)
-        out.play('',0,.2,false,false)
+        out.play('',0,1,false,false)
         next_hamikazi = game.time.now + hamikazi_rate;
       }
   }
@@ -86,7 +85,7 @@ function walk(step_rate, stepping_mult, moving_mult){
   human.animations.play('run', step_rate, true)
   human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, moving_mult))
   if (game.time.now > next_step){
-    footstep.play()
+    footstep.play('', 0, .4, false)
     next_step = game.time.now + step_rate*stepping_mult
   }
 }
