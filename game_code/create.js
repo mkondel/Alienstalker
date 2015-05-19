@@ -46,10 +46,10 @@ function sound_init(){
   shotgun.allowMultiple = true
   // mumbling.allowMultiple = true
 
-  // music = game.add.audio('music')
-  // music.loop = true
-  // music.volume = .5
-  // music.play()
+  music = game.add.audio('music')
+  music.loop = true
+  music.volume = .5
+  music.play()
 }
 
 
