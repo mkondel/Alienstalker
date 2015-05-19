@@ -1,6 +1,7 @@
 function render(){
   // game.debug.cameraInfo(game.camera, 32, 32)
-  // game.debug.body(alien);
+  // game.debug.body(human);
+  // game.debug.pointer(game.input.mousePointer)
   // game.debug.spriteInfo(human, 360, 60);
   // game.debug.text(human.hit_rotation, 30, 30)
   // game.debug.text('rotation: '+human.rotation, 30, 30)

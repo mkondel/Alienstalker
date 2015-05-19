@@ -1,14 +1,22 @@
+// function moveSprite () {
+//   if (game.input.activePointer.isDown){
+//     if (tween_follow && tween_follow.isRunning)
+//       tween_follow.stop()
+//     human.rotation = game.physics.arcade.angleToPointer(human)
+//     //  300 = 300 pixels per second = the speed the human will move at, regardless of the distance it has to travel
+//     tween_follow = game.add.tween(human).to({ x: game.input.activePointer.x, y: game.input.activePointer.y }, duration, Phaser.Easing.Linear.None, true)
+//   }
+// }
+
 
 function update(){
-//  humans!
-  human.body.velocity.x = 0
-  human.body.velocity.y = 0
+//  follow mouse
+  // follow_mouse(human)
+  // moveSprite()
+
 
 //  collisions
-  game.physics.arcade.collide(human, walls, hit_the_wall, null, this)
-  game.physics.arcade.collide(human, floor, hit_the_wall, null, this)
-  game.physics.arcade.collide(bullets, walls, explode, null, this)
-  game.physics.arcade.collide(bullets, floor, explode, null, this)
+  great_collider()
 
 //  actions
   if (fire_button.isDown)
@@ -17,9 +25,41 @@ function update(){
     hamikazi_fire()
 
 //  TANK controls
+  // tank_it()
+
+//  WASD for camera
+  // cam_wasd()
+}
+
+
+function follow_mouse(sprite){
+//  only move when you click
+  if (game.input.activePointer.isDown)
+    game.physics.arcade.moveToPointer(sprite, 100)
+  else
+    sprite.body.velocity.setTo(0, 0)
+}
+
+
+function great_collider(){
+  game.physics.arcade.collide(human, walls, hit_the_wall, null, this)
+  game.physics.arcade.collide(human, floor, hit_the_wall, null, this)
+  game.physics.arcade.collide(bullets, walls, explode, null, this)
+  game.physics.arcade.collide(bullets, floor, explode, null, this)
+
+  // game.physics.arcade.collide(human, game.input.activePointer, stop_player_movement, null, this)
+}
+
+function stop_player_movement(sprite, p)
+{
+  sprite.body.velocity.setTo(0, 0)
+}
+
+
+function tank_it(){
   if( Math.abs(human.hit_rotation - human.rotation) > wall_stickiness )
     human.is_stuck = false
-
+  //  cursor player tank-style movement
   if (cursors.left.isDown)
     human.rotation -= human.rotation_speed
   else if (cursors.right.isDown)
@@ -35,9 +75,10 @@ function update(){
     human.animations.play('run', 24, false)
     human.animations.stop()
   }
+}
 
 
-//  WASD for camera
+function cam_wasd(){
   if (game.input.keyboard.isDown(Phaser.Keyboard.W))
     game.camera.y -= camera_pan_speed;
   else if (game.input.keyboard.isDown(Phaser.Keyboard.S))
@@ -61,6 +102,8 @@ function gun_fire () {
     }
   }
 }
+
+
 function hamikazi_fire() {
   var hamikazi = hamikazis.getFirstExists(false)
   if(hamikazi){
@@ -77,16 +120,6 @@ function hamikazi_fire() {
         out.play('',0,1,false,false)
         next_hamikazi = game.time.now + hamikazi_rate;
       }
-  }
-}
-
-
-function walk(step_rate, stepping_mult, moving_mult){
-  human.animations.play('run', step_rate, true)
-  human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, moving_mult))
-  if (game.time.now > next_step){
-    footstep.play('', 0, .4, false)
-    next_step = game.time.now + step_rate*stepping_mult
   }
 }
 

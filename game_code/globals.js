@@ -1,5 +1,5 @@
 
-var w = 1000
+var w = 500
 var h = 500
 var camera_pan_speed = 15
 var sprite_size = 60
@@ -24,3 +24,6 @@ var next_step = 0
 var next_hamikazi = 0
 var hamikazi_rate = fire_rate
 var mumbling
+
+var tween_follow
+var pointer_distance_threshold = sprite_size

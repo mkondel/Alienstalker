@@ -46,10 +46,10 @@ function sound_init(){
   shotgun.allowMultiple = true
   // mumbling.allowMultiple = true
 
-  music = game.add.audio('music')
-  music.loop = true
-  music.volume = .5
-  music.play()
+  // music = game.add.audio('music')
+  // music.loop = true
+  // music.volume = .5
+  // music.play()
 }
 
 
@@ -68,11 +68,12 @@ function generate_human(){
   game.physics.enable(human);
   human.anchor.set(.5)
   human.scale.set(.5)
-  human.body.setSize(64,64,0,0)
+  human.body.setSize(32,32,0,0)
   set_player_collisions(walls, [121, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 234])
   set_player_collisions(floor, [90] )
   human.rotation_speed = .1
   human.hit_volume = .5
+  human.step_sounds = footstep
 }
 
 
@@ -130,8 +131,8 @@ function load_weapons(){
 
       self.fade_in = game.add.tween(self)
       self.scale_in = game.add.tween(self.scale)
-      self.fade_in.to( { alpha: 1 }, 1000)
-      self.scale_in.to({x:3, y:3}, 3000)
+      self.fade_in.to( { alpha: 1 }, 3000)
+      self.scale_in.to({x:3, y:3}, 1000)
     }
   }
 }
@@ -157,9 +158,37 @@ function roll_camera(){
 
 
 function implement_controls(){
-  cursors = game.input.keyboard.createCursorKeys()
+  // cursors = game.input.keyboard.createCursorKeys()
   fire_button = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
   hamikazi_button = game.input.keyboard.addKey(Phaser.Keyboard.X)
+
+  game.input.onDown.add(walk, this)
+  game.input.onUp.add(stop_moving, this)
+}
+
+function stop_moving(pointer){
+  human.body.velocity.setTo(0, 0)
+  human.animations.play('run', 24, false)
+  human.animations.stop()
+  human.step_sounds.stop()
+}
+
+
+function walk(pointer) {
+  // if (tween_follow && tween_follow.isRunning)
+  //   tween_follow.stop()
+  var dist_to_pointer = game.physics.arcade.distanceToPointer(human)
+  var step_rate = 20
+
+  if(dist_to_pointer > pointer_distance_threshold){
+    human.rotation = game.physics.arcade.angleToPointer(human, pointer)
+    human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, dist_to_pointer))
+
+    human.animations.play('run', step_rate, true)
+    human.step_sounds.play('', 0, .4, true, false)
+
+    // tween_follow = game.add.tween(human).to({ x: pointer.x, y: pointer.y }, duration, Phaser.Easing.Linear.None, true)
+  }
 }
 
 
