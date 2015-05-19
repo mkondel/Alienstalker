@@ -1,30 +1,18 @@
 function create() {
-
   start_engine()
-
-  sound_init()
-
+  make_sounds()
   build_level()
-
   generate_human()
-
   load_weapons()
-
   roll_camera()
-
   implement_controls()
 }
 
-
 function start_engine(){
-  game.renderer.clearBeforeRender = false;
-  game.renderer.roundPixels = true;
   game.physics.startSystem(Phaser.Physics.ARCADE)
 }
 
-
-function sound_init(){
-  
+function make_sounds(){  
   wall = game.add.audio('wall')
   failed = game.add.audio('failed')
   disintegrate = game.add.audio('materialize')
@@ -44,14 +32,12 @@ function sound_init(){
   explosion.allowMultiple = true
   blaster.allowMultiple = true
   shotgun.allowMultiple = true
-  // mumbling.allowMultiple = true
 
   music = game.add.audio('music')
   music.loop = true
   music.volume = .5
   music.play()
 }
-
 
 function build_level(){
   map = game.add.tilemap('map')
@@ -60,7 +46,6 @@ function build_level(){
   walls = map.createLayer('walls');
   floor.resizeWorld()
 }
-
 
 function generate_human(){
   human = game.add.sprite( 500,500, 'human')
@@ -75,7 +60,6 @@ function generate_human(){
   human.hit_volume = .5
   human.step_sounds = footstep
 }
-
 
 function load_weapons(){
   //  bullet pool
@@ -122,32 +106,20 @@ function load_weapons(){
         eek.play('', 0, 1, true)
       })
     }
-
-    function reset_hamikazi(self){
-      eek.stop()
-      self.alpha = 0
-      self.scale = {x:.1, y:.1}
-      self.body.setSize(16,16,0,0)
-
-      self.fade_in = game.add.tween(self)
-      self.scale_in = game.add.tween(self.scale)
-      self.fade_in.to( { alpha: 1 }, 3000)
-      self.scale_in.to({x:3, y:3}, 1000)
-    }
   }
 }
 
+function reset_hamikazi(self){
+  eek.stop()
+  self.alpha = 0
+  self.scale = {x:.1, y:.1}
+  self.body.setSize(16,16,0,0)
 
-function blow_up(self){
-  var fireball = explosions.getFirstExists(false)
-  if(fireball){
-    fireball.reset(self.x, self.y)
-    fireball.play('kaboom', 40, false, true)
-    fireball.scale.set(self.explosion_scale)
-  }
-  explosion.play('', 0, self.explosion_volume, false, true)
+  self.fade_in = game.add.tween(self)
+  self.scale_in = game.add.tween(self.scale)
+  self.fade_in.to( { alpha: 1 }, 3000)
+  self.scale_in.to({x:3, y:3}, 1000)
 }
-
 
 function roll_camera(){
   game.camera.follow(human, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT)
@@ -155,7 +127,6 @@ function roll_camera(){
   game.camera.focusOn(human)
   // game.camera.deadzone = new Phaser.Rectangle(w/4,h/4,w/2,h/2)
 }
-
 
 function implement_controls(){
   // cursors = game.input.keyboard.createCursorKeys()
@@ -165,32 +136,6 @@ function implement_controls(){
   game.input.onDown.add(walk, this)
   game.input.onUp.add(stop_moving, this)
 }
-
-function stop_moving(pointer){
-  human.body.velocity.setTo(0, 0)
-  human.animations.play('run', 24, false)
-  human.animations.stop()
-  human.step_sounds.stop()
-}
-
-
-function walk(pointer) {
-  // if (tween_follow && tween_follow.isRunning)
-  //   tween_follow.stop()
-  var dist_to_pointer = game.physics.arcade.distanceToPointer(human)
-  var step_rate = 20
-
-  if(dist_to_pointer > pointer_distance_threshold){
-    human.rotation = game.physics.arcade.angleToPointer(human, pointer)
-    human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, dist_to_pointer))
-
-    human.animations.play('run', step_rate, true)
-    human.step_sounds.play('', 0, .4, true, false)
-
-    // tween_follow = game.add.tween(human).to({ x: pointer.x, y: pointer.y }, duration, Phaser.Easing.Linear.None, true)
-  }
-}
-
 
 function set_player_collisions(map_layer, solids){
   for(tile_id=0; tile_id<solids.length; tile_id++){

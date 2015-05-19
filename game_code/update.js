@@ -31,6 +31,25 @@ function update(){
   // cam_wasd()
 }
 
+function stop_moving(pointer){
+  human.body.velocity.setTo(0, 0)
+  human.animations.play('run', 24, false)
+  human.animations.stop()
+  human.step_sounds.stop()
+}
+
+function walk(pointer) {
+  var dist_to_pointer = game.physics.arcade.distanceToPointer(human)
+  var step_rate = 20
+
+  if(dist_to_pointer > pointer_distance_threshold){
+    human.rotation = game.physics.arcade.angleToPointer(human, pointer)
+    human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, dist_to_pointer))
+    human.animations.play('run', step_rate, true)
+    human.step_sounds.play('', 0, .4, true, false)
+  }
+}
+
 
 function follow_mouse(sprite){
 //  only move when you click
@@ -136,6 +155,17 @@ function hit_the_wall (a, b) {
 
 
 function explode (a, b) { a.kill() }
+
+
+function blow_up(self){
+  var fireball = explosions.getFirstExists(false)
+  if(fireball){
+    fireball.reset(self.x, self.y)
+    fireball.play('kaboom', 40, false, true)
+    fireball.scale.set(self.explosion_scale)
+  }
+  explosion.play('', 0, self.explosion_volume, false, true)
+}
 
 
 
