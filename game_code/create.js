@@ -24,36 +24,36 @@ function start_engine(){
 
 
 function sound_init(){
-  fx = game.add.audio('sfx')
-  fx.allowMultiple = true
-  fx.addMarker('wall', 1, .05)
-  fx.addMarker('failed', 3, .5)
-  fx.addMarker('materialize', 4, 3)
-  fx.addMarker('meow', 8, .5)
-  fx.addMarker('ping', 9, .1)
-  fx.addMarker('pickup', 10, 1)
-  fx.addMarker('dematerialize', 12, 3)
-  fx.addMarker('out', 17, 1)
-  fx.addMarker('plup', 19, .3, .3)
+  
+  wall = game.add.audio('wall')
+  failed = game.add.audio('failed')
+  disintegrate = game.add.audio('materialize')
+  meow = game.add.audio('meow')
+  ping = game.add.audio('ping')
+  pickup = game.add.audio('pickup')
+  out = game.add.audio('out')
+  plup = game.add.audio('plup')
 
   explosion = game.add.audio('explosion');
-  explosion.allowMultiple = true
   blaster = game.add.audio('blaster')
-  blaster.allowMultiple = true
   shotgun = game.add.audio('shotgun')
-  shotgun.allowMultiple = true
   footstep = game.add.audio('step')
+  mumbling = game.add.audio('mumbling')
+
+  explosion.allowMultiple = true
+  blaster.allowMultiple = true
+  shotgun.allowMultiple = true
   footstep.allowMultiple = true
+  mumbling.allowMultiple = true
 
-  music = game.add.audio('music')
-  music.loop = true
-
-  music.volume = 1
   shotgun.volume = .4
   blaster.volume = .3
   footstep.volume = .4
-  
-  music.play()
+
+  // music = game.add.audio('music')
+  // music.loop = true
+  // music.volume = 1
+  // music.play()
 }
 
 
@@ -62,7 +62,6 @@ function build_level(){
   map.addTilesetImage('breadinator_tileset');
   floor = map.createLayer('floor');
   walls = map.createLayer('walls');
-
   floor.resizeWorld()
 }
 
@@ -70,7 +69,6 @@ function build_level(){
 function generate_human(){
   human = game.add.sprite( 500,500, 'human')
   human.animations.add('run');
-
   game.physics.enable(human);
   human.anchor.set(.5)
   human.scale.set(.5)
@@ -91,8 +89,9 @@ function load_weapons(){
     bullet.anchor.set(.5)
     bullet.body.setSize(8,8,0,0)
     bullet.scale.set(.5)
-    bullet.fireball_scale = .5
+    bullet.explosion_scale = .5
     bullet.explosion_volume = .3
+    bullet.events.onKilled.add(blow_up, bullet)
   }
 
   //  explosion pool
@@ -111,13 +110,49 @@ function load_weapons(){
   for (var i = 0; i < 1; i++){
     var hamikazi = hamikazis.create(0, 0, 'hamikazi', [0], false)
     hamikazi.anchor.setTo(.5)
-    hamikazi.body.setSize(64,64,0,0)
-    hamikazi.scale.set(2.5)
     hamikazi.animations.add('bounce')
-    hamikazi.fireball_scale = 2
     hamikazi.sound_effect = blaster
+    
+    hamikazi.explosion_scale = 2
     hamikazi.explosion_volume = 1
+
+    reset_hamikazi(hamikazi)
+    hamikazi.events.onKilled.add(reset_hamikazi, hamikazi)
+    hamikazi.events.onKilled.add(blow_up, hamikazi)
+    hamikazi.events.onKilled.add(shutup)
+
+    hamikazi.mumble = function(){ 
+      disintegrate.play('', 0, .5)
+      disintegrate.onStop.add(function(){ 
+        mumbling.play('', 0, .15, true)
+      })
+    }
+    function shutup(){ mumbling.stop() }
+
+
+    function reset_hamikazi(self){
+      shutup()
+      self.alpha = 0
+      self.scale = {x:.1, y:.1}
+      self.body.setSize(16,16,0,0)
+
+      self.fade_in = game.add.tween(self)
+      self.scale_in = game.add.tween(self.scale)
+      self.fade_in.to( { alpha: 1 }, 1000)
+      self.scale_in.to({x:3, y:3}, 2000)
+    }
   }
+}
+
+
+function blow_up(self){
+  var fireball = explosions.getFirstExists(false)
+  if(fireball){
+    fireball.reset(self.x, self.y)
+    fireball.play('kaboom', 40, false, true)
+    fireball.scale.set(self.explosion_scale)
+  }
+  explosion.play('', 0, self.explosion_volume, false, true)
 }
 
 

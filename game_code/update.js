@@ -1,30 +1,22 @@
 
 function update(){
-
+//  humans!
   human.body.velocity.x = 0
   human.body.velocity.y = 0
 
-// mouse/touch
-  // if (!game.input.activePointer.position.isZero())
-  // {
-  //   game.renderXY(helix, game.input.activePointer.x, game.input.activePointer.y, true)
-  // }
-
-// collisions
+//  collisions
   game.physics.arcade.collide(human, walls, hit_the_wall, null, this)
   game.physics.arcade.collide(human, floor, hit_the_wall, null, this)
   game.physics.arcade.collide(bullets, walls, explode, null, this)
   game.physics.arcade.collide(bullets, floor, explode, null, this)
-  game.physics.arcade.collide(hamikazis, walls, explode, null, this)
-  game.physics.arcade.collide(hamikazis, floor, explode, null, this)
 
-// actions
+//  actions
   if (fire_button.isDown)
     gun_fire()
   if (hamikazi_button.isDown)
-    hamikaze()
+    hamikazi_fire()
 
-// TANK controls
+//  TANK controls
   if( Math.abs(human.hit_rotation - human.rotation) > wall_stickiness )
     human.is_stuck = false
 
@@ -45,7 +37,7 @@ function update(){
   }
 
 
-// WASD for camera
+//  WASD for camera
   if (game.input.keyboard.isDown(Phaser.Keyboard.W))
     game.camera.y -= camera_pan_speed;
   else if (game.input.keyboard.isDown(Phaser.Keyboard.S))
@@ -69,31 +61,24 @@ function gun_fire () {
     }
   }
 }
-function hamikaze () {
+function hamikazi_fire() {
   var hamikazi = hamikazis.getFirstExists(false)
   if(hamikazi){
-    fx.play('dematerialize', 0, .3, false, false)
     hamikazi.reset(human.x, human.y)
-    hamikazi.play('bounce',10,true)
+    hamikazi.mumble()
+    hamikazi.play('bounce',30,true)
     hamikazi.lifespan = 5000
     game.physics.arcade.velocityFromRotation(human.rotation, 50, hamikazi.body.velocity)
-    next_hamikaze = game.time.now + 1500;
+    hamikazi.fade_in.start()
+    hamikazi.scale_in.start()
+    next_hamikazi = game.time.now + 1500;
   }else{
-    if (game.time.now > next_hamikaze){
-        fx.play('out', 0, .2, false, false)
-        next_hamikaze = game.time.now + hamikaze_rate;
+    if (game.time.now > next_hamikazi){
+        // fx.play('out', 0, .2, false, false)
+        out.play('',0,.2,false,false)
+        next_hamikazi = game.time.now + hamikazi_rate;
       }
   }
-}
-function explode (a, b) {
-  var fireball = explosions.getFirstExists(false)
-  if(fireball){
-    fireball.reset(a.x, a.y)
-    fireball.play('kaboom', 40, false, true)
-    fireball.scale.set(a.fireball_scale)
-  }
-  a.kill()
-  explosion.play('', 0, a.explosion_volume, false, true)
 }
 
 
@@ -111,12 +96,14 @@ function hit_the_wall (a, b) {
   if (game.time.now > next_wall_hitting){
     a.hit_rotation = a.rotation
     a.is_stuck = true
-    fx.play('wall', 0, a.hit_volume, false, false)
+    // fx.play('wall', 0, a.hit_volume, false, false)
+    wall.play('', 0, a.hit_volume, false, false)
     next_wall_hitting = game.time.now + wall_hitting_interval;
   }
 }
 
 
+function explode (a, b) { a.kill() }
 
 
 

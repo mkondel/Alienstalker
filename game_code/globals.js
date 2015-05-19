@@ -21,5 +21,6 @@ var explosions
 
 var next_step = 0
 
-var next_hamikaze = 0
-var hamikaze_rate = fire_rate
+var next_hamikazi = 0
+var hamikazi_rate = fire_rate
+var mumbling
