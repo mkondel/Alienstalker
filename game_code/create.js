@@ -35,10 +35,10 @@ function make_sounds(){
   shotgun.allowMultiple = true
   explosion.allowMultiple = true
 
-  // music = game.add.audio('music')
-  // music.loop = true
-  // music.volume = .5
-  // music.play()
+  music = game.add.audio('music')
+  music.loop = true
+  music.volume = .5
+  music.play()
 }
 
 function build_level(){
@@ -58,7 +58,7 @@ function create_human(){
   human.body.setSize(32,32,0,0)
   set_player_collisions([ [walls, [121, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 234]], [floor, [90]] ])
   human.rotation_speed = .1
-  human.wall_collision_volume = .5
+  human.wall_collision_volume = .8
   human.step_sounds = footstep
 }
 
@@ -105,7 +105,7 @@ function load_weapons(){
 
 function eeker(){ 
   hamikazi1.play('', 0, 1, false).onStop.add(function(){ 
-    eek.play('', 0, 1, true)
+    eek.play('', 0, .3, true)
   })
 }
 
