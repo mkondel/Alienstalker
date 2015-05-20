@@ -104,8 +104,8 @@ function load_weapons(){
 }
 
 function eeker(){ 
-  hamikazi1.play('', 0, 1, false).onStop.add(function(){ 
-    eek.play('', 0, .3, true)
+  hamikazi1.play('', 0, .5, false).onStop.add(function(){ 
+    eek.play('', 0, .15, true)
   })
 }
 
@@ -149,7 +149,7 @@ function walk() {
   human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, velocity))
   // human.animations.stop('walk',true)
   human.animations.play('walk', velocity/10, true)
-  human.step_sounds.play('', 0, .4, true, false)
+  human.step_sounds.play('', 0, .2, true, false)
 }
 function stop_moving(){
   human.animations.stop('walk',true)
