@@ -1,3 +1,5 @@
+//  render and game obj
+
 function render(){
   // game.debug.cameraInfo(game.camera, 32, 32)
   // game.debug.body(human);
@@ -10,7 +12,7 @@ function render(){
 }
 
 
-var game = new Phaser.Game(w, h, Phaser.AUTO, '',
+var game = new Phaser.Game(w, h, Phaser.AUTO, 'game',
                           { preload: preload, 
                             create: create, 
                             update: update, 
