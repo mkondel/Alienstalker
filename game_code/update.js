@@ -1,13 +1,4 @@
-// function moveSprite () {
-//   if (game.input.activePointer.isDown){
-//     if (tween_follow && tween_follow.isRunning)
-//       tween_follow.stop()
-//     human.rotation = game.physics.arcade.angleToPointer(human)
-//     //  300 = 300 pixels per second = the speed the human will move at, regardless of the distance it has to travel
-//     tween_follow = game.add.tween(human).to({ x: game.input.activePointer.x, y: game.input.activePointer.y }, duration, Phaser.Easing.Linear.None, true)
-//   }
-// }
-
+//  game methods
 
 function update(){
 //  follow mouse
@@ -31,7 +22,6 @@ function update(){
   // cam_wasd()
 }
 
-
 function follow_mouse(sprite){
 //  only move when you click
   if (game.input.activePointer.isDown)
@@ -40,21 +30,12 @@ function follow_mouse(sprite){
     sprite.body.velocity.setTo(0, 0)
 }
 
-
 function great_collider(){
   game.physics.arcade.collide(human, walls, hit_the_wall, null, this)
   game.physics.arcade.collide(human, floor, hit_the_wall, null, this)
   game.physics.arcade.collide(bullets, walls, explode, null, this)
   game.physics.arcade.collide(bullets, floor, explode, null, this)
-
-  // game.physics.arcade.collide(human, game.input.activePointer, stop_player_movement, null, this)
 }
-
-function stop_player_movement(sprite, p)
-{
-  sprite.body.velocity.setTo(0, 0)
-}
-
 
 function tank_it(){
   if( Math.abs(human.hit_rotation - human.rotation) > wall_stickiness )
@@ -72,11 +53,10 @@ function tank_it(){
   else if( !cursors.up.isDown && !cursors.down.isDown && human.is_stuck )
     human.is_stuck = false
   else{
-    human.animations.play('run', 24, false)
+    human.animations.play('run', 60, false)
     human.animations.stop()
   }
 }
-
 
 function cam_wasd(){
   if (game.input.keyboard.isDown(Phaser.Keyboard.W))
@@ -88,7 +68,6 @@ function cam_wasd(){
   else if (game.input.keyboard.isDown(Phaser.Keyboard.D))
     game.camera.x += camera_pan_speed;
 }
-
 
 function gun_fire () {
   if (game.time.now > next_fire && bullets.countDead() > 0){
@@ -102,7 +81,6 @@ function gun_fire () {
     }
   }
 }
-
 
 function hamikazi_fire() {
   var hamikazi = hamikazis.getFirstExists(false)
@@ -123,19 +101,27 @@ function hamikazi_fire() {
   }
 }
 
-
 function hit_the_wall (a, b) {
   if (game.time.now > next_wall_hitting){
     a.hit_rotation = a.rotation
     a.is_stuck = true
-    // fx.play('wall', 0, a.hit_volume, false, false)
-    wall.play('', 0, a.hit_volume, false, false)
+    // fx.play('wall', 0, a.wall_collision_volume, false, false)
+    wall.play('', 0, a.wall_collision_volume, false, false)
     next_wall_hitting = game.time.now + wall_hitting_interval;
   }
 }
 
-
 function explode (a, b) { a.kill() }
+
+function blow_up(self){
+  var fireball = explosions.getFirstExists(false)
+  if(fireball){
+    fireball.reset(self.x, self.y)
+    fireball.play('kaboom', 40, false, true)
+    fireball.scale.set(self.explosion_scale)
+  }
+  explosion.play('', 0, self.explosion_volume, false, true)
+}
 
 
 
