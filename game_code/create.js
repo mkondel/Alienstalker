@@ -21,11 +21,9 @@ function make_sounds(){
   failed =        game.add.audio('failed')
   pickup =        game.add.audio('pickup')
 
-  eek =           game.add.audio('eek')
   out =           game.add.audio('out')
   wall =          game.add.audio('wall')
   disintegrate =  game.add.audio('materialize')
-  hamikazi1 =     game.add.audio('hamikazi1')
   footstep =      game.add.audio('step')
   blaster =       game.add.audio('blaster')
   shotgun =       game.add.audio('shotgun')
@@ -60,6 +58,8 @@ function create_human(){
   human.rotation_speed = .1
   human.wall_collision_volume = .8
   human.step_sounds = footstep
+  human.casting = false
+  human.run_velocity = 200
 }
 
 function load_weapons(){
@@ -89,36 +89,51 @@ function load_weapons(){
   hamikazis = game.add.group()
   hamikazis.enableBody = true
   hamikazis.outOfBoundsKill = true
-  for (var i = 0; i < 1; i++){
+  for (var i = 0; i < 3; i++){
     var hamikazi = hamikazis.create(0, 0, 'hamikazi', [0], false)
     hamikazi.animations.add('bounce')
+    hamikazi.eeker = eeker
     reset_hamikazi(hamikazi)
     hamikazi.events.onKilled.add(reset_hamikazi, hamikazi)
     hamikazi.events.onKilled.add(blow_up, hamikazi)
     hamikazi.anchor.setTo(.5)
     hamikazi.explosion_scale = 1
     hamikazi.explosion_volume = 1
-    hamikazi.sound_effect = blaster
-    hamikazi.eek = eeker
+    hamikazi.sound_effect = game.add.audio('hamikazi1')
   }
 }
 
 function eeker(){ 
-  hamikazi1.play('', 0, .5, false).onStop.add(function(){ 
-    eek.play('', 0, .15, true)
-  })
+  this.animations.stop('bounce')
+  this.play('bounce',15,true)
+  game.physics.arcade.velocityFromRotation(human.rotation, 20, this.body.velocity)
+  this.fade_in.start()
+  this.scale_in.start()
+
+  this.sound_effect.onPlay.add(function(){
+    human.casting = true
+  },this)
+
+  this.sound_effect.onStop.add(function(){
+    human.casting = false
+    this.animations.stop('bounce')
+    this.play('bounce',30,true)
+    this.lifespan = 3000
+    game.physics.arcade.velocityFromRotation(human.rotation, 50, this.body.velocity)
+  },this)
+
+  this.sound_effect.play('', 0, .5, false)
 }
 
 function reset_hamikazi(self){
-  eek.stop()
   self.alpha = 0
   self.scale = {x:.1, y:.1}
   self.body.setSize(16,16,0,0)
 
   self.fade_in = game.add.tween(self)
   self.scale_in = game.add.tween(self.scale)
-  self.fade_in.to( { alpha: 1 }, 3000)
-  self.scale_in.to({x:3, y:3}, 1000)
+  self.fade_in.to( { alpha: 1 }, 2900)
+  self.scale_in.to({x:4, y:4}, 2900)
 }
 
 function roll_camera(){
@@ -145,10 +160,11 @@ function moved_pointer(pointer) {
 }
 
 function walk() {
-  var velocity = game.physics.arcade.distanceToPointer(human)/world_radius
-  human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, velocity))
-  // human.animations.stop('walk',true)
-  human.animations.play('walk', velocity/10, true)
+  // var velocity = game.physics.arcade.distanceToPointer(human)/world_radius
+  // if(velocity != human.body.velocity)
+  //   human.animations.stop('walk')
+  human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, human.run_velocity))
+  human.animations.play('walk', human.run_velocity/20, true)
   human.step_sounds.play('', 0, .2, true, false)
 }
 function stop_moving(){

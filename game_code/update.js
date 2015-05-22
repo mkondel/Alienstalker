@@ -83,21 +83,14 @@ function gun_fire () {
 }
 
 function hamikazi_fire() {
-  var hamikazi = hamikazis.getFirstExists(false)
-  if(hamikazi){
-    hamikazi.reset(human.x, human.y)
-    hamikazi.eek()
-    hamikazi.play('bounce',30,true)
-    hamikazi.lifespan = 5000
-    game.physics.arcade.velocityFromRotation(human.rotation, 50, hamikazi.body.velocity)
-    hamikazi.fade_in.start()
-    hamikazi.scale_in.start()
-    next_hamikazi = game.time.now + 1500;
+  if (hamikazis.countDead() > 0 && !human.casting){
+    var hamikazi = hamikazis.getFirstExists(false)
+    if(hamikazi){
+      hamikazi.reset(human.x, human.y)
+      hamikazi.eeker()
+    }
   }else{
-    if (game.time.now > next_hamikazi){
-        out.play('',0,1,false,false)
-        next_hamikazi = game.time.now + hamikazi_rate;
-      }
+    out.play('',0,1,false,false)
   }
 }
 
