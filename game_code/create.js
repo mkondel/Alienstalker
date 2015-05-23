@@ -33,10 +33,10 @@ function make_sounds(){
   shotgun.allowMultiple = true
   explosion.allowMultiple = true
 
-  music = game.add.audio('music')
-  music.loop = true
-  music.volume = .5
-  music.play()
+  // music = game.add.audio('music')
+  // music.loop = true
+  // music.volume = .5
+  // music.play()
 }
 
 function build_level(){
@@ -148,89 +148,21 @@ function control_player(){
   fire_button = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
   hamikazi_button = game.input.keyboard.addKey(Phaser.Keyboard.X)
 
-  game.input.onDown.add(walk)
-  game.input.addMoveCallback(moved_pointer, this)
-  game.input.onUp.add(stop_moving)
+  // game.input.onDown.add(walk)
+  // game.input.addMoveCallback(moved_pointer, this)
+  // game.input.onUp.add(stop_moving)
 
+  joy = new Joystick(125,380, 'holder','pin')
+  joy.events.onMove.add(joystick_handler)
 }
 
-
-var normalize = Phaser.Point.normalize;
-var zero      = new Phaser.Point(0, 0);
-var Joystick = function({x, y, holder, pin}) {
-
-    // extends Phaser.Sprite {
-    this = super(game, 0, 0, holder);
-    this.anchor.setTo(0.5, 0.5);
-    this.fixedToCamera = true;
-    this.cameraOffset.setTo(x, y);
-
-    this.direction      = new Phaser.Point(0, 0);
-    this.distance       = 0;
-    this.pinAngle       = 0;
-    this.disabled       = false;
-    this.isBeingDragged = false;
-
-    this.events.onDown = new Phaser.Signal();
-    this.events.onUp   = new Phaser.Signal();
-    this.events.onMove = new Phaser.Signal();
-    
-    /* Pin indicator - what players think they drag */
-    this.pin = game.add.sprite(0, 0, pin);
-    this.pin.anchor.setTo(0.5, 0.5);
-    this.addChild(this.pin);
-    /* Invisible sprite that players actually drag */
-    var dragger = this.dragger = game.add.sprite(0, 0, null);
-      dragger.anchor.setTo(0.5, 0.5);
-      dragger.width = dragger.height = 181;
-      dragger.inputEnabled = true;
-      dragger.input.enableDrag(true);
-      /* Set flags on drag */
-      dragger.events.onDragStart.add(this.onDragStart, this);
-      dragger.events.onDragStop.add(this.onDragStop, this);
-    this.addChild(dragger);
-  }
-
-
-
-
-  function enable() {
-      this.disabled = false;
-    }
-  function disable() {
-      this.disabled = true;
-    }
-  function onDragStart(){
-    this.isBeingDragged = true;
-    if (this.disabled) return;
-    this.events.onDown.dispatch();
-  }
-  function onDragStop(){
-    this.isBeingDragged = false;
-    /* Reset pin and dragger position */
-    this.dragger.position.setTo(0, 0);
-    this.pin.position.setTo(0, 0);
-    if (this.disabled) return;
-    this.events.onUp.dispatch(this.direction, this.distance, this.angle);
-  }
-  function update(){
-    if (this.isBeingDragged) {
-      var dragger   = this.dragger.position;
-      var pin       = this.pin.position;
-      var angle     = this.pinAngle = zero.angle(dragger);
-      var distance  = this.distance = dragger.getMagnitude();
-      var direction = normalize(dragger, this.direction);
-      pin.copyFrom(dragger);
-      if (distance > 90) pin.setMagnitude(90);
-      if (this.disabled) return;
-      this.events.onMove.dispatch(direction, distance, angle);
-    }
-  }
+var joystick_handler = function(dir, dist, ang){
+  // console.log(JSON.stringify(dir), dist, ang)
+  human.rotation = ang
+  human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, dist))
+  human.animations.play('walk', dist, true)
+  human.step_sounds.play('', 0, .1, true, false)
 }
-
-
-
-
 
 //-------------------------------------------------------------------------
 function moved_pointer(pointer) {
@@ -247,11 +179,11 @@ function walk() {
   human.animations.play('walk', human.run_velocity/20, true)
   human.step_sounds.play('', 0, .2, true, false)
 }
-function stop_moving(){
-  human.animations.stop('walk',true)
-  human.step_sounds.stop()
-  human.body.velocity.setTo(0, 0)
-}
+// function stop_moving(){
+//   human.animations.stop('walk',true)
+//   human.step_sounds.stop()
+//   human.body.velocity.setTo(0, 0)
+// }
 
 function set_player_collisions(collidescope){
   for(var s=0;s<collidescope.length;s++){

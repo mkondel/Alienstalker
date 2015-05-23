@@ -4,7 +4,7 @@ function preload() {
     game.load.tilemap('map', 'assets/tilemaps/maps/map_a.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('breadinator_tileset', 'assets/tilemaps/tiles/breadinator_tileset.png');
     
-    game.load.audio('music', 'assets/audio/dark_horror_cave.mp3')
+    // game.load.audio('music', 'assets/audio/dark_horror_cave.mp3')
 
     game.load.audio('explosion', 'assets/audio/explosion.mp3');
     game.load.audio('blaster', 'assets/audio/blaster.mp3')
@@ -29,4 +29,12 @@ function preload() {
     game.load.spritesheet('hamikazi', 'assets/sprites/humstar.png', 32,32, 6);
 
     game.load.image('bullet', 'assets/sprites/bullet.png');
+
+    game.load.image('holder', 'assets/sprites/joystick/holder.png');
+    game.load.image('pin', 'assets/sprites/joystick/pin.png');
+    game.load.image('a_out', 'assets/sprites/joystick/a_out.png');
+    game.load.image('a_in', 'assets/sprites/joystick/a_in.png');
+    game.load.image('b_out', 'assets/sprites/joystick/b_out.png');
+    game.load.image('b_in', 'assets/sprites/joystick/b_in.png');
+
 }

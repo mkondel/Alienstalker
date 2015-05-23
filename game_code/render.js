@@ -3,6 +3,7 @@
 function render(){
   // game.debug.cameraInfo(game.camera, 32, 32)
   // game.debug.body(human);
+  // game.debug.body(joy);
   // game.debug.pointer(game.input.mousePointer)
   // game.debug.spriteInfo(human, 360, 60);
   // game.debug.text(human.hit_rotation, 30, 30)
