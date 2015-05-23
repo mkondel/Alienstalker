@@ -2,10 +2,6 @@
 
 
 function update(){
-
-  if(!joy.isBeingDragged){
-    stop_walking()
-  }
 //  follow mouse
   // follow_mouse(human)
   // moveSprite()
@@ -25,12 +21,6 @@ function update(){
 
 //  WASD for camera
   // cam_wasd()
-}
-
-function stop_walking(){
-  human.animations.stop('walk',true)
-  human.step_sounds.stop()
-  human.body.velocity.setTo(0, 0)
 }
 
 function follow_mouse(sprite){

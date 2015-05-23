@@ -1,7 +1,7 @@
 //  global game vars
 
-var w = 700
-var h = 500
+var w = 800
+var h = 600
 var world_radius = Math.sqrt(h*h+w*w)/1000
 
 var sprite_size = 60

@@ -145,19 +145,28 @@ function roll_camera(){
 
 function control_player(){
   // cursors = game.input.keyboard.createCursorKeys()
-  fire_button = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-  hamikazi_button = game.input.keyboard.addKey(Phaser.Keyboard.X)
+  // fire_button = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+  // hamikazi_button = game.input.keyboard.addKey(Phaser.Keyboard.X)
 
   // game.input.onDown.add(walk)
   // game.input.addMoveCallback(moved_pointer, this)
   // game.input.onUp.add(stop_moving)
 
-  joy = new Joystick(125,380, 'holder','pin')
+  joy = new Joystick(125,480, 'holder','pin')
   joy.events.onMove.add(joystick_handler)
+  joy.events.onUp.add(stop_walking)
+
+  fire_button = game.add.button(680, 680, 'a_out', gun_fire);
+  hamikazi_button = game.add.button(780, 600, 'b_out', hamikazi_fire);
 }
 
-var joystick_handler = function(dir, dist, ang){
-  // console.log(JSON.stringify(dir), dist, ang)
+function stop_walking(){
+  human.animations.stop('walk',true)
+  human.step_sounds.stop()
+  human.body.velocity.setTo(0, 0)
+}
+
+function joystick_handler(dir, dist, ang){
   human.rotation = ang
   human.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(human.angle, dist))
   human.animations.play('walk', dist, true)
