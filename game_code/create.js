@@ -33,10 +33,10 @@ function make_sounds(){
   shotgun.allowMultiple = true
   explosion.allowMultiple = true
 
-  // music = game.add.audio('music')
-  // music.loop = true
-  // music.volume = .5
-  // music.play()
+  music = game.add.audio('music')
+  music.loop = true
+  music.volume = .5
+  music.play()
 }
 
 function build_level(){
