@@ -156,8 +156,10 @@ function control_player(){
   joy.events.onMove.add(joystick_handler)
   joy.events.onUp.add(stop_walking)
 
-  fire_button = game.add.button(680, 680, 'a_out', gun_fire);
-  hamikazi_button = game.add.button(780, 600, 'b_out', hamikazi_fire);
+  fire_button = game.add.button(680, 480, 'a_out', gun_fire);
+  hamikazi_button = game.add.button(780, 400, 'b_out', hamikazi_fire);
+  fire_button.fixedToCamera = true;
+  hamikazi_button.fixedToCamera = true;
 }
 
 function stop_walking(){
